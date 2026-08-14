@@ -52,7 +52,6 @@ class Funciones {
     }
 
     int sumatoria(int[] numeros) {
-        // dado un arreglo de n´umeros enteros, calcula la suma de sus elementos.
         int res = 0;
         for (int numero : numeros){
             res += numero;
@@ -79,7 +78,6 @@ class Funciones {
     }
 
     boolean todosPares(int[] numeros) {
-        //  determina si todos los n´umeros de un arreglo de n´umeros son pares
         for (int numero : numeros){
             if (esPar(numero) == false){
                 return false;
@@ -89,7 +87,6 @@ class Funciones {
     }
 
     boolean esPrefijo(String s1, String s2) {
-        // dados dos strings determina si el primero es prefijo del segundo
         if (s1.length() > s2.length()){
             return false;
         }
@@ -102,7 +99,6 @@ class Funciones {
     }
 
     boolean esSufijo(String s1, String s2) {
-        // dados dos strings determina si el primero es sufijo del segundo.
         if (s1.length() > s2.length()){
             return false;
         }
