@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ABB.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">labo4</a> &gt; <a href="index.source.html" class="el_package">aed</a> &gt; <span class="el_source">ABB.java</span></div><h1>ABB.java</h1><pre class="source lang-java linenums">package aed;
+
+import java.util.NoSuchElementException;
+
+// Todos los tipos de datos &quot;Comparables&quot; tienen el método compareTo()
+// elem1.compareTo(elem2) devuelve un entero. Si es mayor a 0, entonces elem1 &gt; elem2
+public class ABB&lt;T extends Comparable&lt;T&gt;&gt; {
+    private Nodo _raiz;
+    private int _cardinal;
+
+    private class Nodo {
+        T valor;
+        Nodo izq;
+        Nodo der;
+        Nodo padre;
+
+<span class="fc" id="L17">        Nodo(T v){</span>
+<span class="fc" id="L18">            valor = v;</span>
+<span class="fc" id="L19">            izq = null;</span>
+<span class="fc" id="L20">            der = null;</span>
+<span class="fc" id="L21">            padre = null;</span>
+<span class="fc" id="L22">        }</span>
+    }
+
+<span class="fc" id="L25">    public ABB() {</span>
+<span class="fc" id="L26">        _raiz = null;</span>
+<span class="fc" id="L27">        _cardinal = 0;</span>
+<span class="fc" id="L28">    }</span>
+
+    public int cardinal() {
+<span class="fc" id="L31">        return _cardinal;</span>
+    }
+
+    private Nodo minimoNodo(Nodo nodo) {
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        while (nodo.izq != null){</span>
+<span class="fc" id="L36">            nodo = nodo.izq;</span>
+        }
+<span class="fc" id="L38">        return nodo;</span>
+    }
+
+    public T minimo(){
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (_raiz == null){</span>
+<span class="nc" id="L43">            throw new NoSuchElementException(&quot;El conjunto está vacío&quot;);</span>
+        }
+<span class="fc" id="L45">        return minimoNodo(_raiz).valor;</span>
+    }
+
+    public T maximo(){
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (_raiz == null){</span>
+<span class="nc" id="L50">            throw new NoSuchElementException(&quot;El conjunto está vacío&quot;);</span>
+        }
+<span class="fc" id="L52">        Nodo actual = _raiz;</span>
+
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        while(actual.der != null){</span>
+<span class="fc" id="L55">            actual = actual.der;</span>
+        }
+
+<span class="fc" id="L58">        return actual.valor;</span>
+    }
+
+    private Nodo buscarNodo(T elem){
+<span class="fc" id="L62">        Nodo actual = _raiz;</span>
+<span class="fc" id="L63">        Nodo ultimo = null;</span>
+
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        while (actual != null){</span>
+<span class="fc" id="L66">            ultimo = actual;</span>
+
+<span class="fc" id="L68">            int comparacion = elem.compareTo(actual.valor);</span>
+
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            if (comparacion == 0){</span>
+<span class="fc" id="L71">                return actual;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            } else if(comparacion &lt; 0){</span>
+<span class="fc" id="L73">                actual = actual.izq;</span>
+<span class="fc" id="L74">            } else {</span>
+<span class="fc" id="L75">                actual = actual.der;</span>
+            }
+        }
+        
+<span class="fc" id="L79">        return ultimo;</span>
+    }
+
+    public void insertar(T elem){
+<span class="fc" id="L83">        Nodo ultimo = buscarNodo(elem);</span>
+
+        // caso árbol vacío
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (ultimo == null){</span>
+<span class="fc" id="L87">            _raiz = new Nodo(elem);</span>
+<span class="fc" id="L88">            _cardinal++;</span>
+<span class="fc" id="L89">            return;</span>
+        }
+<span class="fc" id="L91">        int comparacion = elem.compareTo(ultimo.valor);</span>
+
+        // si el elemento ya estaba (no hacemos nada)
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (comparacion == 0){</span>
+<span class="fc" id="L95">            return;</span>
+        }
+
+<span class="fc" id="L98">        Nodo nuevo = new Nodo(elem);</span>
+<span class="fc" id="L99">        nuevo.padre = ultimo;</span>
+
+        // conectamos al padre con el nuevo nodo
+
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (comparacion &lt; 0){</span>
+<span class="fc" id="L104">            ultimo.izq = nuevo;</span>
+<span class="fc" id="L105">        } else {</span>
+<span class="fc" id="L106">            ultimo.der = nuevo;</span>
+        }
+<span class="fc" id="L108">        _cardinal++;</span>
+<span class="fc" id="L109">    }</span>
+
+    public boolean pertenece(T elem){
+<span class="fc" id="L112">        return perteneceRecursivo(_raiz, elem);</span>
+    }
+
+    private boolean perteneceRecursivo(Nodo nodo, T elem){
+        // caso llegamos a un subárbol vacío
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        if (nodo == null){</span>
+<span class="fc" id="L118">            return false;</span>
+        }
+
+<span class="fc" id="L121">        int comparacion = elem.compareTo(nodo.valor);</span>
+
+        //caso encontramos el elemento
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        if (comparacion == 0){</span>
+<span class="fc" id="L125">            return true;</span>
+        }
+
+        //seguimos buscando en el subárbol correspondiente
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (comparacion &lt; 0){</span>
+<span class="fc" id="L130">            return perteneceRecursivo(nodo.izq, elem);</span>
+        } else {
+<span class="fc" id="L132">            return perteneceRecursivo(nodo.der, elem);</span>
+        }
+    }
+
+    private Nodo sucesor(Nodo nodo) {
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        if (nodo.der != null){</span>
+<span class="fc" id="L138">            return minimoNodo(nodo.der);</span>
+        }
+
+<span class="fc" id="L141">        Nodo ancestro = nodo.padre;</span>
+
+        // Subimos mientras venimos del hijo derecho
+
+<span class="fc bfc" id="L145" title="All 4 branches covered.">        while (ancestro != null &amp;&amp; nodo == ancestro.der){</span>
+<span class="fc" id="L146">            nodo = ancestro;</span>
+<span class="fc" id="L147">            ancestro = ancestro.padre;</span>
+        }
+
+<span class="fc" id="L150">        return ancestro;</span>
+    }
+
+    public void eliminar(T elem){
+<span class="fc" id="L154">        Nodo nodo = buscarNodo(elem);</span>
+        // buscarNodo devuelve el nodo encontrado o, 
+        // si no lo encuentra, el último visitado.
+
+        //si el árbol está vacío o el elemento no está, no hago nada
+<span class="pc bpc" id="L159" title="2 of 4 branches missed.">        if (nodo == null || elem.compareTo(nodo.valor) != 0){</span>
+<span class="nc" id="L160">            return;</span>
+        }
+
+        // caso: dos hijos
+<span class="fc bfc" id="L164" title="All 4 branches covered.">        if (nodo.izq != null &amp;&amp; nodo.der != null){</span>
+<span class="fc" id="L165">            Nodo siguiente = sucesor(nodo);</span>
+<span class="fc" id="L166">            nodo.valor = siguiente.valor; // Reemplazamos su valor por el siguiente valor en orden</span>
+<span class="fc" id="L167">            nodo = siguiente; // cambia a qué nodo apunta la variable local nodo</span>
+            // Como va a apuntar al sucesor que es el mínimo del subárbol derecho, éste no va a tener hijo izquierdo
+            // (si tuviera, ese hijo sería menor y no habría encontrado el mínimo)
+            // Por lo tanto, ese nodo tiene como máximo un hijo y es más fácil quitarlo
+        }
+        
+        //Después de este bloque, el nodo que vamos a desconectar siempre tiene cero o un hijo.
+        // guardamos el hijo que va a ocupar su lugar
+
+        Nodo hijo;
+
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (nodo.izq != null) {</span>
+<span class="fc" id="L179">            hijo = nodo.izq;</span>
+<span class="fc" id="L180">        } else {</span>
+<span class="fc" id="L181">            hijo = nodo.der;</span>
+        }
+
+        // hacemos que el padre apunte a ese hijo
+
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        if (nodo.padre == null){  // si no tiene padre, estamos sacando la raiz</span>
+<span class="fc" id="L187">            _raiz = hijo;  //su hijo pasa a ser la nueva raiz</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">        } else if (nodo == nodo.padre.izq) {   // si el nodo que eliminamos es hijo izquierdo de su padre</span>
+<span class="fc" id="L189">            nodo.padre.izq = hijo;    // su hijo ocupa su lugar como hijo izquierdo del padre</span>
+<span class="fc" id="L190">        } else {  // si el nodo que eliminamos es el hijo derecho</span>
+<span class="fc" id="L191">            nodo.padre.der = hijo; //su hijo ocupa su lugar como hijo derecho del padre</span>
+        }
+
+<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (hijo != null){   // si el nodo eliminado tenía un hijo</span>
+<span class="fc" id="L195">            hijo.padre = nodo.padre;  // su padre pasa a ser el padre del nodo eliminado</span>
+        }
+
+<span class="fc" id="L198">        _cardinal--;</span>
+<span class="fc" id="L199">    }</span>
+
+    public String toString(){
+<span class="fc" id="L202">        StringBuilder resultado = new StringBuilder(&quot;{&quot;);</span>
+<span class="fc" id="L203">        ABB_Iterador it = iterador();</span>
+
+<span class="fc bfc" id="L205" title="All 2 branches covered.">        while (it.haySiguiente()){</span>
+<span class="fc" id="L206">            resultado.append(it.siguiente());</span>
+
+<span class="fc bfc" id="L208" title="All 2 branches covered.">            if (it.haySiguiente()){</span>
+<span class="fc" id="L209">                resultado.append(&quot;,&quot;);</span>
+            }
+        }
+<span class="fc" id="L212">        resultado.append(&quot;}&quot;);</span>
+<span class="fc" id="L213">        return resultado.toString();</span>
+    }
+
+    public class ABB_Iterador{
+        // Sirve para recorrer los elementos del árbol de menor a mayor, uno por uno, sin eliminarlos ni modificar el árbol
+        private Nodo _actual;
+
+<span class="fc" id="L220">        public ABB_Iterador(){</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">            if (_raiz == null){</span>
+<span class="fc" id="L222">                _actual = null;</span>
+<span class="fc" id="L223">            } else {  //si tiene elementos</span>
+<span class="fc" id="L224">                _actual = minimoNodo(_raiz);  //_actual apunta al nodo mínimo, porque queremos empezar por el menor</span>
+            }
+<span class="fc" id="L226">        }</span>
+
+        public boolean haySiguiente() {            
+<span class="fc bfc" id="L229" title="All 2 branches covered.">            return _actual != null;</span>
+        }
+
+        public T siguiente() {
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">            if (!haySiguiente()){</span>
+<span class="nc" id="L234">                throw new NoSuchElementException(&quot;No hay más elementos&quot;);</span>
+            }
+
+<span class="fc" id="L237">            T resultado = _actual.valor;  // guardamos el valor que vamos a devolver</span>
+<span class="fc" id="L238">            _actual = sucesor(_actual); //movemos el señalador al siguiente nodo en orden</span>
+
+<span class="fc" id="L240">            return resultado;</span>
+        }
+    }
+
+    public ABB_Iterador iterador() {
+<span class="fc" id="L245">        return new ABB_Iterador();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
